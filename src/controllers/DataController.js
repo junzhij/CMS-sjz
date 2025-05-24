@@ -81,7 +81,6 @@ class DataController {
     try {
       const preferences = await Preference.getAll();
       const dislikes = await Dislike.getAll();
-
       res.status(200).json({
         success: true,
         data: {
