@@ -207,6 +207,74 @@ class DataController {
       });
     }
   }
+  // 删除单个偏好
+  static async deletePreference(req, res) {
+    try {
+      const { id } = req.body;
+
+      if (!id) {
+        return res.status(400).json({
+          success: false,
+          message: '偏好ID是必需的'
+        });
+      }
+
+      const deleted = await Preference.delete(id);
+
+      if (deleted) {
+        res.status(200).json({
+          success: true,
+          message: '偏好删除成功'
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: '偏好未找到'
+        });
+      }
+    } catch (error) {
+      console.error('删除偏好错误:', error);
+      res.status(500).json({
+        success: false,
+        message: '删除偏好失败',
+        error: error.message
+      });
+    }
+  }
+  // 删除单个不喜欢项
+  static async deleteDislike(req, res) {
+    try {
+      const { id } = req.body;
+
+      if (!id) {
+        return res.status(400).json({
+          success: false,
+          message: '不喜欢项ID是必需的'
+        });
+      }
+
+      const deleted = await Dislike.delete(id);
+
+      if (deleted) {
+        res.status(200).json({
+          success: true,
+          message: '不喜欢项删除成功'
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: '不喜欢项未找到'
+        });
+      }
+    } catch (error) {
+      console.error('删除不喜欢项错误:', error);
+      res.status(500).json({
+        success: false,
+        message: '删除不喜欢项失败',
+        error: error.message
+      });
+    }
+  }
 }
 
 module.exports = DataController;

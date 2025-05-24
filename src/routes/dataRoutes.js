@@ -24,4 +24,9 @@ router.get('/ifinit', DataController.isInitialized);
 // POST /api/data/clear - 清除所有数据
 router.post('/clear', DataController.clearData);
 
+// DELETE /api/preference/ - 删除偏好
+router.post('/delpreference', DataController.deletePreference);
+// DELETE /api/dislike/ - 删除不喜欢项
+router.post('/deldislike', DataController.deleteDislike);
+
 module.exports = router;

@@ -76,5 +76,4 @@ class Dislike {
     }
   }
 }
-
 module.exports = Dislike;
