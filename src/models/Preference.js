@@ -75,16 +75,6 @@ class Preference {
       throw new Error(`Error deleting all preferences: ${error.message}`);
     }
   }
-  // 删除偏好记录
-  static async deletePreference(id) {
-    try {
-      const [result] = await pool.execute('DELETE FROM preference WHERE id = ?', [id]);
-      return result.affectedRows > 0;
-    } catch (error) {
-      throw new Error(`Error deleting preference by id: ${error.message}`);
-    }
-  }
-
 }
 
 module.exports = Preference;

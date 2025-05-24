@@ -54,13 +54,19 @@ class DataController {
       const dislikes = await Dislike.getAll();
 
       // 调用AI服务获取建议
-      const suggestion = await AIService.getSuggestion(preferences, dislikes, additionalData);
-
+      const analyzeData = await AIService.getSuggestion(preferences, dislikes, additionalData);
+      //const analyzeData = await AIService.analyzeData({suggestion});
+      console.log('AI分析结果:', analyzeData);
       res.status(200).json({
         success: true,
         message: '建议获取成功',
+
+        //dev
+        additionalData,
+
+
         data: {
-          suggestion,
+          analyzeData,
           preferences: preferences.length,
           dislikes: dislikes.length,
           timestamp: new Date().toISOString()
