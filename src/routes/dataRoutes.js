@@ -18,4 +18,10 @@ router.post('/preference', DataController.addPreference);
 // POST /api/data/dislike - 添加单个不喜欢项
 router.post('/dislike', DataController.addDislike);
 
+// GET /api/data/ifinit
+router.get('/ifinit', DataController.isInitialized);
+
+// POST /api/data/clear - 清除所有数据
+router.post('/clear', DataController.clearData);
+
 module.exports = router;
