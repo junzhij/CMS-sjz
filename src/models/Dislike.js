@@ -20,7 +20,7 @@ class Dislike {
       const [rows] = await pool.execute('SELECT * FROM dislike ORDER BY created_at DESC');
       return rows.map(row => ({
         ...row,
-        value: JSON.parse(row.value)
+        value: typeof row.value === 'string' ? JSON.parse(row.value) : row.value
       }));
     } catch (error) {
       throw new Error(`Error fetching dislikes: ${error.message}`);
@@ -36,7 +36,7 @@ class Dislike {
       );
       return rows.map(row => ({
         ...row,
-        value: JSON.parse(row.value)
+        value: typeof row.value === 'string' ? JSON.parse(row.value) : row.value
       }));
     } catch (error) {
       throw new Error(`Error fetching dislikes by type: ${error.message}`);

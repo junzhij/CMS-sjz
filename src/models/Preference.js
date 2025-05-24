@@ -20,7 +20,7 @@ class Preference {
       const [rows] = await pool.execute('SELECT * FROM preference ORDER BY created_at DESC');
       return rows.map(row => ({
         ...row,
-        value: JSON.parse(row.value)
+        value: typeof row.value === 'string' ? JSON.parse(row.value) : row.value
       }));
     } catch (error) {
       throw new Error(`Error fetching preferences: ${error.message}`);
@@ -36,7 +36,7 @@ class Preference {
       );
       return rows.map(row => ({
         ...row,
-        value: JSON.parse(row.value)
+        value: typeof row.value === 'string' ? JSON.parse(row.value) : row.value
       }));
     } catch (error) {
       throw new Error(`Error fetching preferences by type: ${error.message}`);
