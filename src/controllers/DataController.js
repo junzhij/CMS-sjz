@@ -162,6 +162,51 @@ class DataController {
       });
     }
   }
+// 获取是否已初始化
+  static async isInitialized(req, res) {
+    try {
+      const preferences = await Preference.getAll();
+      const dislikes = await Dislike.getAll();
+
+      const initialized = preferences.length > 0 || dislikes.length > 0;
+
+      res.status(200).json({
+        success: true,
+        initialized,
+        data: {
+          preferences: preferences.length,
+          dislikes: dislikes.length
+        }
+      });
+    } catch (error) {
+      console.error('检查初始化状态错误:', error);
+      res.status(500).json({
+        success: false,
+        message: '检查初始化状态失败',
+        error: error.message
+      });
+    }
+  }
+
+  // 清除所有数据
+  static async clearData(req, res) {
+    try {
+      await Preference.deleteAll();
+      await Dislike.deleteAll();
+
+      res.status(200).json({
+        success: true,
+        message: '所有数据已清除'
+      });
+    } catch (error) {
+      console.error('清除数据错误:', error);
+      res.status(500).json({
+        success: false,
+        message: '清除数据失败',
+        error: error.message
+      });
+    }
+  }
 }
 
 module.exports = DataController;
