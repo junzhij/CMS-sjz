@@ -8,7 +8,7 @@ const openai = new OpenAI({
 
 class AIService {
   // 获取AI建议
-  static async getSuggestion(preferences, dislikes, additionalData = {}) {
+  static async getSuggestion(preferences, dislikes, additionalData) {
     try {
       const systemPrompt = `你是一个智能建议系统。基于用户的偏好和不喜欢的内容，为用户提供个性化建议。
       
@@ -67,6 +67,38 @@ class AIService {
       return completion.choices[0].message.content;
     } catch (error) {
       throw new Error(`数据分析错误: ${error.message}`);
+    }
+  }
+  static async getRecipe(requirements) {
+    try {
+      const systemPrompt = `你是一个智能食谱推荐系统。基于用户的需求，为用户提供个性化的食谱建议。
+用户需求: ${JSON.stringify(requirements)}
+请基于这些信息提供3-5个具体的食谱建议，每个建议包含：
+1. 食谱名称
+2. 食材列表
+3. 制作步骤
+返回格式为JSON数组。`;
+
+      const completion = await openai.chat.completions.create({
+        model: process.env.OPENAI_MODEL || 'gpt-3.5-turbo',
+        messages: [
+          {
+            role: 'system',
+            content: systemPrompt
+          },
+          {
+            role: 'user',
+            content: '请根据我的需求给出食谱建议。'
+          }
+        ],
+        max_tokens: 1000,
+        temperature: 0.7,
+      });
+
+      return completion.choices[0].message.content;
+    }
+    catch (error) {
+      throw new Error(`食谱推荐错误: ${error.message}`);
     }
   }
 }

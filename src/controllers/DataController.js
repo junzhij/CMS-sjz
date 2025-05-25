@@ -81,7 +81,29 @@ class DataController {
       });
     }
   }
+  static async getRecipe(req, res) {
+    try {
+      const { requirements } = req.body;
+      const suggestion = await AIService.getSuggestion(requirements);
+      console.log('AI食谱建议:', suggestion);
+      res.status(200).json({
+        success: true,
+        message: '食谱获取成功',
+        data: {
+          suggestion,
+          timestamp: new Date().toISOString()
+        }
+      });
 
+    } catch (error) {
+      console.error('获取食谱错误:', error);
+      res.status(500).json({
+        success: false,
+        message: '获取食谱失败',
+        error: error.message
+      });
+    }
+  }
   // 获取当前数据状态
   static async getStatus(req, res) {
     try {

@@ -3,30 +3,33 @@ const DataController = require('../controllers/DataController');
 
 const router = express.Router();
 
-// POST /api/data/init - 初始化偏好和不喜欢数据
+// POST /api/init - 初始化偏好和不喜欢数据
 router.post('/init', DataController.init);
 
-// POST /api/data/getsuggest - 获取AI建议
+// POST /api/getsuggest - 获取AI建议
 router.post('/getsuggest', DataController.getSuggestion);
 
-// GET /api/data/status - 获取当前数据状态
+// GET /api/status - 获取当前数据状态
 router.get('/status', DataController.getStatus);
 
-// POST /api/data/preference - 添加单个偏好
+// POST /api/preference - 添加单个偏好
 router.post('/preference', DataController.addPreference);
 
-// POST /api/data/dislike - 添加单个不喜欢项
+// POST /api/dislike - 添加单个不喜欢项
 router.post('/dislike', DataController.addDislike);
 
-// GET /api/data/ifinit
+// GET /api/ifinit
 router.get('/ifinit', DataController.isInitialized);
 
-// POST /api/data/clear - 清除所有数据
+// POST /api/clear - 清除所有数据
 router.post('/clear', DataController.clearData);
 
-// DELETE /api/preference/ - 删除偏好
+// POST /api/preference/ - 删除偏好
 router.post('/delpreference', DataController.deletePreference);
-// DELETE /api/dislike/ - 删除不喜欢项
+
+// POST /api/dislike/ - 删除不喜欢项
 router.post('/deldislike', DataController.deleteDislike);
 
+// POST /api/getrecipe - 获取食谱
+router.post('/getrecipe', DataController.getRecipe);
 module.exports = router;
