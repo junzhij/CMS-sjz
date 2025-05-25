@@ -73,11 +73,10 @@ class AIService {
     try {
       const systemPrompt = `你是一个智能食谱推荐系统。基于用户的需求，为用户提供个性化的食谱建议。
 用户需求: ${JSON.stringify(requirements)}
-请基于这些信息提供3-5个具体的食谱建议，每个建议包含：
+请基于这些信息提供一个具体的食谱建议，包含：
 1. 食谱名称
 2. 食材列表
-3. 制作步骤
-返回格式为JSON数组。`;
+3. 制作步骤`;
 
       const completion = await openai.chat.completions.create({
         model: process.env.OPENAI_MODEL || 'gpt-3.5-turbo',
