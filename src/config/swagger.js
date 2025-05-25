@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
@@ -8,7 +10,7 @@ const options = {
       title: 'Express CMS Backend API',
       version: '1.0.0',
       description: `
-# 智能建议系统 API
+# ”食荐“者 API
 
 这是一个基于 AI 的智能建议系统，提供以下功能：
 
@@ -16,7 +18,6 @@ const options = {
 - 🤖 **AI 建议生成**: 基于用户偏好和历史数据生成个性化建议
 - 🍳 **食谱推荐**: 根据食材和偏好推荐合适的食谱
 - 📊 **数据管理**: 管理用户偏好和不喜欢的项目
-- 📈 **数据分析**: 提供数据洞察和模式识别
 
 ## 快速开始
 1. 首先访问 \`/api/presets\` 获取测试数据
@@ -30,7 +31,7 @@ const options = {
       `,
       contact: {
         name: 'API Support',
-        email: 'support@example.com'
+        email: 'jjzz08@icloud.com'
       },
       license: {
         name: 'MIT',
