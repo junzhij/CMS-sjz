@@ -7,7 +7,35 @@ class DataController {
   // 初始化偏好和不喜欢数据
   static async init(req, res) {
     try {
-      const { preferences = [], dislikes = [] } = req.body;
+      console.log('接收到的原始数据:', req.body);
+      
+      let { preferences = [], dislikes = [] } = req.body;
+
+      // 处理字符串格式的数据
+      if (typeof preferences === 'string') {
+        try {
+          preferences = JSON.parse(preferences);
+        } catch (e) {
+          console.error('解析 preferences 字符串失败:', e);
+          preferences = [];
+        }
+      }
+
+      if (typeof dislikes === 'string') {
+        try {
+          dislikes = JSON.parse(dislikes);
+        } catch (e) {
+          console.error('解析 dislikes 字符串失败:', e);
+          dislikes = [];
+        }
+      }
+
+      console.log('解析后的 preferences:', preferences);
+      console.log('解析后的 dislikes:', dislikes);
+
+      // 确保是数组
+      if (!Array.isArray(preferences)) preferences = [];
+      if (!Array.isArray(dislikes)) dislikes = [];
 
       // 清空现有数据
       await Preference.deleteAll();
@@ -16,6 +44,11 @@ class DataController {
       // 添加新的偏好数据
       const preferenceIds = [];
       for (const pref of preferences) {
+        // 验证数据格式
+        if (!pref || !pref.type || !pref.value) {
+          console.warn('跳过无效的偏好数据:', pref);
+          continue;
+        }
         const id = await Preference.create(pref.type, pref.value, pref.weight || 1.0);
         preferenceIds.push(id);
       }
@@ -23,6 +56,11 @@ class DataController {
       // 添加新的不喜欢数据
       const dislikeIds = [];
       for (const dislike of dislikes) {
+        // 验证数据格式
+        if (!dislike || !dislike.type || !dislike.value) {
+          console.warn('跳过无效的不喜欢数据:', dislike);
+          continue;
+        }
         const id = await Dislike.create(dislike.type, dislike.value, dislike.weight || 1.0);
         dislikeIds.push(id);
       }
