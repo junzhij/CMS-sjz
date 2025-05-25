@@ -1,6 +1,7 @@
 const Preference = require('../models/Preference');
 const Dislike = require('../models/Dislike');
 const AIService = require('../services/AIService');
+const { markd } = require('marked');
 
 class DataController {
   // 初始化偏好和不喜欢数据
@@ -85,12 +86,13 @@ class DataController {
     try {
       const { requirements } = req.body;
       const suggestion = await AIService.getSuggestion(requirements);
+      const htmlContent = markd(suggestion);
       console.log('AI食谱建议:', suggestion);
       res.status(200).json({
         success: true,
         message: '食谱获取成功',
         data: {
-          suggestion,
+          htmlContent,
           timestamp: new Date().toISOString()
         }
       });
