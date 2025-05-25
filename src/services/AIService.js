@@ -20,7 +20,12 @@ class AIService {
 1. 建议内容
 2. 理由说明
 3. 相关性评分(1-10)
-
+example:
+    {
+        "suggestion": "黎巴嫩海鲜拼盘（包含虾和蟹）",
+        "reason": "您喜欢海鲜，尤其是虾和蟹。黎巴嫩海鲜拼盘通常包含多种海鲜，搭配中东香料，鲜香可口，适合约会的场合。",
+        "relevance": 8
+    },
 返回格式为JSON数组。`;
 
       const completion = await openai.chat.completions.create({
