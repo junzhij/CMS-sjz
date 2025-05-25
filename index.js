@@ -5,6 +5,9 @@ const cors = require('cors');
 // 导入路由
 const dataRoutes = require('./src/routes/dataRoutes');
 
+// 导入Swagger配置
+const { specs, swaggerUi } = require('./src/config/swagger');
+
 // 加载环境变量
 dotenv.config();
 
@@ -21,9 +24,20 @@ app.use(express.json());
 // 路由
 app.use('/api', dataRoutes);
 
+// Swagger API 文档路由
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'Express CMS Backend API Documentation',
+}));
+
 // 根路由
 app.get('/', (req, res) => {
-  res.json({ message: 'Express CMS Backend API' });
+  res.json({ 
+    message: 'Express CMS Backend API',
+    documentation: '/api-docs',
+    apiEndpoint: '/api'
+  });
 });
 
 // 启动时清空数据的函数
@@ -61,6 +75,7 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`📡 API 可用地址: http://localhost:${PORT}/api`);
   console.log(`📄 根路由: http://localhost:${PORT}/`);
+  console.log(`📚 Swagger API 文档: http://localhost:${PORT}/api-docs`);
 });
 
 module.exports = app;
