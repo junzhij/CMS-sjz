@@ -15,7 +15,7 @@ async function initDatabase() {
     console.log('✅ 数据库创建成功');
 
     // 选择数据库
-    await connection.execute(`USE ${process.env.DB_NAME || 'express_cms'}`);
+    await connection.query(`USE ${process.env.DB_NAME || 'express_cms'}`);
 
     // 创建 preference 表
     const createPreferenceTable = `

@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  baseURL: process.env.OPENAI_BASE_URL || 'http://tower.taildcd01.ts.net:3000/v1',
+  baseURL: process.env.OPENAI_BASE_URL || 'https://api.deepseek.com/v1',
 });
 
 class AIService {

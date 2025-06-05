@@ -1,7 +1,7 @@
 const Preference = require('../models/Preference');
 const Dislike = require('../models/Dislike');
 const AIService = require('../services/AIService');
-const { markd } = require('marked');
+const { marked } = require('marked');
 
 class DataController {
   // 初始化偏好和不喜欢数据
@@ -94,18 +94,44 @@ class DataController {
 
       // 调用AI服务获取建议
       const analyzeData = await AIService.getSuggestion(preferences, dislikes, additionalData);
-      //const analyzeData = await AIService.analyzeData({suggestion});
-      console.log('AI分析结果:', analyzeData);
+      console.log('AI分析原始结果:', analyzeData);
+      
+      // 处理AI返回的数据，转换为JSON格式
+      let suggestions = [];
+      
+      if (typeof analyzeData === 'string') {
+        // 清理AI返回的格式标记
+        let cleanedData = analyzeData
+          .replace(/```json/g, '')
+          .replace(/```/g, '')
+          .trim();
+        
+        console.log('清理后的数据:', cleanedData);
+        
+        try {
+          suggestions = JSON.parse(cleanedData);
+        } catch (e) {
+          console.error('解析 AI 分析结果失败:', e);
+          // 如果解析失败，返回一个包含原始数据的对象
+          suggestions = [{
+            suggestion: "数据解析失败",
+            reason: "AI返回的数据格式无法解析",
+            relevance: 0,
+            rawData: analyzeData
+          }];
+        }
+      } else if (Array.isArray(analyzeData)) {
+        suggestions = analyzeData;
+      } else {
+        suggestions = [analyzeData];
+      }
+
       res.status(200).json({
         success: true,
         message: '建议获取成功',
-
-        //dev
         additionalData,
-
-
         data: {
-          analyzeData,
+          suggestions: suggestions,
           preferences: preferences.length,
           dislikes: dislikes.length,
           timestamp: new Date().toISOString()
@@ -122,15 +148,40 @@ class DataController {
   }
   static async getRecipe(req, res) {
     try {
-      const { requirements } = req.body;
-      const suggestion = await AIService.getSuggestion(requirements);
-      const htmlContent = markd(suggestion);
+      // 支持多种请求格式
+      const { requirements, dishName, reason, ...otherData } = req.body;
+      
+      // 构建完整的食谱要求对象
+      let recipeRequirements;
+      
+      if (requirements) {
+        // 如果直接提供了 requirements 对象
+        recipeRequirements = requirements;
+      } else if (dishName) {
+        // 如果提供了 dishName 和 reason，构建要求对象
+        recipeRequirements = {
+          dishName,
+          reason,
+          ...otherData
+        };
+      } else {
+        // 使用整个请求体作为要求
+        recipeRequirements = req.body;
+      }
+      
+      console.log('处理后的食谱要求:', recipeRequirements);
+      
+      const suggestion = await AIService.getRecipe(recipeRequirements);
+      const htmlContent = marked(suggestion);
       console.log('AI食谱建议:', suggestion);
+      
       res.status(200).json({
         success: true,
         message: '食谱获取成功',
         data: {
           htmlContent,
+          rawSuggestion: suggestion,
+          requirements: recipeRequirements,
           timestamp: new Date().toISOString()
         }
       });
